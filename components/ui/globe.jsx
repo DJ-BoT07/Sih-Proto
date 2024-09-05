@@ -31,11 +31,11 @@ export function Globe({
     globeColor: "#1d072e",
     emissive: "#000000",
     emissiveIntensity: 0.1,
-    shininess: 0.9,
+    shininess: 2,
     arcTime: 2000,
     arcLength: 0.9,
-    rings: 1,
-    maxRings: 3,
+    rings: 5,
+    maxRings: 10,
     ...globeConfig,
   };
 
@@ -177,7 +177,7 @@ export function World(props) {
   return (
     (<Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
-      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <ambientLight color={globeConfig.ambientLight} intensity={1} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
         position={new Vector3(-400, 100, 400)} />

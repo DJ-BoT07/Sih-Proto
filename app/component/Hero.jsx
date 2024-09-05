@@ -412,7 +412,7 @@ export function GlobeDemo() {
         </p>
         <div className="mt-4">
           <Button variant="outline" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 font-bold py-5 rounded-full shadow-lg hover:from-purple-500 hover:to-blue-500 hover:scale-110 transition-all duration-300">
-            Go to Calculate
+            Go to Place
           </Button>
           <svg
             className="w-6 h-6 mx-auto mt-2 animate-bounce"
