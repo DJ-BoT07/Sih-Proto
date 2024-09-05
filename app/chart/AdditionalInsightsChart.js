@@ -6,6 +6,7 @@ import {
   PolarRadiusAxis,
   Radar,
   Legend,
+  Tooltip,
   ResponsiveContainer
 } from "recharts";
 
@@ -29,6 +30,7 @@ export default function AdditionalInsightsChart() {
           <PolarAngleAxis dataKey="factor" stroke="#fff" />
           <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#fff" />
           <Radar name="Influence" dataKey="influence" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+          <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none', color: '#fff' }} />
           <Legend />
         </RadarChart>
       </ResponsiveContainer>

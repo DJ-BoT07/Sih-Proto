@@ -24,7 +24,7 @@ export default function Chart() {
 
   return (
     <div className="bg-gradient-to-br from-gray-900 to-blue-900 min-h-screen">
-      <div className="bg-gradient-to-r from-blue-900 p-8 rounded-lg shadow-lg mb-8">
+      <div className="p-8 rounded-lg shadow-lg mb-8">
         <h1 className="text-4xl font-bold mb-6 text-white text-center">Electricity Load Forecast</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
           <div className="bg-blue-800 bg-opacity-50 p-4 rounded-lg">

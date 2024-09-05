@@ -12,15 +12,15 @@ import {
 } from "recharts";
 
 const newDelhiDuckCurveData = [
-  { time: '12 AM', load: 20000, solar: 0, wind: 2000 },
-  { time: '3 AM', load: 18000, solar: 0, wind: 2500 },
-  { time: '6 AM', load: 16000, solar: 1000, wind: 2000 },
-  { time: '9 AM', load: 14000, solar: 5000, wind: 1500 },
-  { time: '12 PM', load: 12000, solar: 8000, wind: 1000 },
-  { time: '3 PM', load: 10000, solar: 7000, wind: 1500 },
-  { time: '6 PM', load: 15000, solar: 2000, wind: 2000 },
-  { time: '9 PM', load: 18000, solar: 0, wind: 2500 },
-  { time: '11 PM', load: 20000, solar: 0, wind: 2000 },
+  { time: '12 AM', load: 21000, solar: 0, wind: 2200 },
+  { time: '3 AM', load: 19000, solar: 0, wind: 2700 },
+  { time: '6 AM', load: 17000, solar: 1200, wind: 2200 },
+  { time: '9 AM', load: 15000, solar: 5200, wind: 1700 },
+  { time: '12 PM', load: 13000, solar: 8200, wind: 1200 },
+  { time: '3 PM', load: 11000, solar: 7200, wind: 1700 },
+  { time: '6 PM', load: 16000, solar: 2200, wind: 2200 },
+  { time: '9 PM', load: 19000, solar: 100, wind: 2700 },
+  { time: '11 PM', load: 21000, solar: 0, wind: 2200 },
 ];
 
 const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
