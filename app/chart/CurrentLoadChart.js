@@ -25,13 +25,12 @@ const newDelhiDuckCurveData = [
 
 const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
 
-export default function CurrentLoadChart() {
-  const [date, setDate] = React.useState(new Date());
-
+export default function CurrentLoadChart({ date, setDate }) {
   return (
     <div className="w-full h-full">
       <h2 className="text-center text-2xl font-bold mb-4 text-white">New Delhi Electricity Load - Duck Curve Effect</h2>
       <p className="text-center text-xl font-semibold mb-4 text-white">Average Load: {averageLoad} MW</p>
+      <p className="text-center text-lg mb-4 text-white">Selected Date: {date.toDateString()}</p>
       
       <div className="flex flex-col md:flex-row gap-4">
         <div className="md:w-3/4">
