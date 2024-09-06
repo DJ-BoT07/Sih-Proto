@@ -30,7 +30,7 @@ export function Globe({
     polygonColor: "rgba(255,255,255,0.7)",
     globeColor: "#1d072e",
     emissive: "#000000",
-    emissiveIntensity: 0.1,
+    emissiveIntensity: 1,
     shininess: 2,
     arcTime: 2000,
     arcLength: 0.9,
@@ -131,7 +131,7 @@ export function Globe({
       .pointRadius(2);
 
     globeRef.current
-      .ringsData([])
+      .ringsData(globeData) // Ensure ringsData is set with globeData
       .ringColor((e) => (t) => e.color(t))
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
@@ -177,7 +177,7 @@ export function World(props) {
   return (
     (<Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
-      <ambientLight color={globeConfig.ambientLight} intensity={1} />
+      <ambientLight color={globeConfig.ambientLight} intensity={1.5} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
         position={new Vector3(-400, 100, 400)} />

@@ -24,7 +24,15 @@ export const globeConfig = {
 export const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
 
 export const sampleArcs = [
-  // ... (keep the existing sampleArcs array)
+  {
+    order: 1,
+    startLat: -19.885592,
+    startLng: -43.951191,
+    endLat: -22.9068,
+    endLng: -43.1729,
+    arcAlt: 0.1,
+    color: colors[Math.floor(Math.random() * (colors.length - 1))],
+  }
 ];
 
 export const areaCoordinates = {

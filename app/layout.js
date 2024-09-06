@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <div className="flex p-4 items-center justify-between bg-secondary shadow-sm bg-[#020202]">
+      <div className="flex p-4 items-center justify-between shadow-sm bg-[#030303]">
         <Image src={"/favicon.ico"} alt="logo" width={50} height={60} className="filter invert"/>
         
         <ul className="hidden md:flex gap-6 text-white items-center">
