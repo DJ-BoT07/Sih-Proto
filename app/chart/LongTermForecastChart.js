@@ -11,18 +11,18 @@ import {
 } from "recharts";
 
 const longTermForecastData = [
-  { month: 'Jan', forecast: 18000, gdpGrowth: 2.1 },
-  { month: 'Feb', forecast: 17000, gdpGrowth: 2.2 },
-  { month: 'Mar', forecast: 16000, gdpGrowth: 2.3 },
-  { month: 'Apr', forecast: 15000, gdpGrowth: 2.4 },
-  { month: 'May', forecast: 16000, gdpGrowth: 2.5 },
-  { month: 'Jun', forecast: 18000, gdpGrowth: 2.6 },
-  { month: 'Jul', forecast: 20000, gdpGrowth: 2.7 },
-  { month: 'Aug', forecast: 21000, gdpGrowth: 2.8 },
-  { month: 'Sep', forecast: 19000, gdpGrowth: 2.9 },
-  { month: 'Oct', forecast: 17000, gdpGrowth: 3.0 },
-  { month: 'Nov', forecast: 18000, gdpGrowth: 3.1 },
-  { month: 'Dec', forecast: 19000, gdpGrowth: 3.2 },
+  { month: 'Jan', forecast: 18000, areaDevelopment: 2.1 },
+  { month: 'Feb', forecast: 17000, areaDevelopment: 2.2 },
+  { month: 'Mar', forecast: 16000, areaDevelopment: 2.3 },
+  { month: 'Apr', forecast: 15000, areaDevelopment: 2.4 },
+  { month: 'May', forecast: 16000, areaDevelopment: 2.5 },
+  { month: 'Jun', forecast: 18000, areaDevelopment: 2.6 },
+  { month: 'Jul', forecast: 20000, areaDevelopment: 2.7 },
+  { month: 'Aug', forecast: 21000, areaDevelopment: 2.8 },
+  { month: 'Sep', forecast: 19000, areaDevelopment: 2.9 },
+  { month: 'Oct', forecast: 17000, areaDevelopment: 3.0 },
+  { month: 'Nov', forecast: 18000, areaDevelopment: 3.1 },
+  { month: 'Dec', forecast: 19000, areaDevelopment: 3.2 },
 ];
 
 export default function LongTermForecastChart() {
@@ -38,7 +38,7 @@ export default function LongTermForecastChart() {
           <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
           <Legend />
           <Area type="monotone" dataKey="forecast" stroke="#8884d8" fill="#8884d8" yAxisId="left" />
-          <Area type="monotone" dataKey="gdpGrowth" stroke="#82ca9d" fill="#82ca9d" yAxisId="right" />
+          <Area type="monotone" dataKey="areaDevelopment" stroke="#82ca9d" fill="#82ca9d" yAxisId="right" />
         </AreaChart>
       </ResponsiveContainer>
     </div>
