@@ -1,5 +1,5 @@
 "use client";;
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
@@ -12,7 +12,7 @@ const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
 const cameraZ = 300;
 
-let numbersOfRings = [0];
+let numbersOfRings = [10];
 
 export function Globe({
   globeConfig,
@@ -22,7 +22,7 @@ export function Globe({
 
   const globeRef = useRef(null);
 
-  const defaultProps = {
+  const defaultProps = useMemo(() => ({
     pointSize: 1,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
@@ -37,7 +37,7 @@ export function Globe({
     rings: 5,
     maxRings: 10,
     ...globeConfig,
-  };
+  }), [globeConfig]);
 
   const _buildMaterial = useCallback(() => {
     if (!globeRef.current) return;
@@ -130,9 +130,7 @@ export function Globe({
         .showAtmosphere(defaultProps.showAtmosphere)
         .atmosphereColor(defaultProps.atmosphereColor)
         .atmosphereAltitude(defaultProps.atmosphereAltitude)
-        .hexPolygonColor((e) => {
-          return defaultProps.polygonColor;
-        });
+        .hexPolygonColor(() => defaultProps.polygonColor);
       startAnimation();
     }
   }, [globeData, defaultProps, startAnimation]);

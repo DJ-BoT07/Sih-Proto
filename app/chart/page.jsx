@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
 import { format, parse } from 'date-fns';
 import dynamic from 'next/dynamic';
@@ -10,7 +10,7 @@ const ShortTermForecastChart = dynamic(() => import('./ShortTermForecastChart'),
 const LongTermForecastChart = dynamic(() => import('./LongTermForecastChart'), { ssr: false });
 const AdditionalInsightsChart = dynamic(() => import('./AdditionalInsightsChart'), { ssr: false });
 
-export default function Chart() {
+function ChartContent() {
   const searchParams = useSearchParams();
   const area = searchParams.get('area');
   const subArea = searchParams.get('subArea');
@@ -56,5 +56,13 @@ export default function Chart() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Chart() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChartContent />
+    </Suspense>
   );
 }
