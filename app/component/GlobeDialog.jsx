@@ -60,22 +60,22 @@ export function GlobeDialog({ setSelectedArea }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="px-6 font-bold py-5 rounded-full shadow-lg hover:scale-110 transition-all duration-300">
+        <Button variant="outline" className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-bold rounded-full shadow-lg hover:scale-105 transition-all duration-300">
           Explore Forecast
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-w-[90vw]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">Select Area and Date</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center">Select Area and Date</DialogTitle>
         </DialogHeader>
         <motion.div 
-          className="grid gap-6 py-4"
+          className="grid gap-4 sm:gap-6 py-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="area" className="text-right">
+          <div className="grid grid-cols-4 items-center gap-2 sm:gap-4">
+            <label htmlFor="area" className="text-right text-sm sm:text-base">
               Area
             </label>
             <Select onValueChange={handleAreaChange}>
@@ -91,12 +91,12 @@ export function GlobeDialog({ setSelectedArea }) {
           </div>
           {localSelectedArea && (
             <motion.div 
-              className="grid grid-cols-4 items-center gap-4"
+              className="grid grid-cols-4 items-center gap-2 sm:gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <label htmlFor="subarea" className="text-right">
+              <label htmlFor="subarea" className="text-right text-sm sm:text-base">
                 Sub-Area
               </label>
               <Select onValueChange={handleSubAreaChange}>
@@ -111,8 +111,8 @@ export function GlobeDialog({ setSelectedArea }) {
               </Select>
             </motion.div>
           )}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="date" className="text-right">
+          <div className="grid grid-cols-4 items-center gap-2 sm:gap-4">
+            <label htmlFor="date" className="text-right text-sm sm:text-base">
               Date
             </label>
             <div className="col-span-3">
@@ -120,7 +120,7 @@ export function GlobeDialog({ setSelectedArea }) {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                className="rounded-md"
+                className="rounded-md max-w-full"
                 disabled={(date) => date < new Date() || date > new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
               />
             </div>

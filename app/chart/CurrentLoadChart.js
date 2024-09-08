@@ -30,13 +30,13 @@ const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum +
 export default function CurrentLoadChart({ date, setDate }) {
   return (
     <div className="w-full h-full">
-      <h2 className="text-center text-2xl font-bold mb-4 text-white">New Delhi Electricity Load - Duck Curve Effect</h2>
-      <p className="text-center text-xl font-semibold mb-4 text-white">Average Load: {averageLoad} MW</p>
-      <p className="text-center text-lg mb-4 text-white">Selected Date: {date.toDateString()}</p>
+      <h2 className="text-center text-xl sm:text-2xl font-bold mb-2 sm:mb-4 text-white">New Delhi Electricity Load - Duck Curve Effect</h2>
+      <p className="text-center text-lg sm:text-xl font-semibold mb-2 sm:mb-4 text-white">Average Load: {averageLoad} MW</p>
+      <p className="text-center text-base sm:text-lg mb-2 sm:mb-4 text-white">Selected Date: {date.toDateString()}</p>
       
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="md:w-3/4">
-          <ResponsiveContainer width="100%" height={450}>
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="w-full lg:w-3/4">
+          <ResponsiveContainer width="100%" height={300} minWidth={300}>
             <LineChart data={newDelhiDuckCurveData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#555" />
               <XAxis dataKey="time" stroke="#fff" />
@@ -49,7 +49,7 @@ export default function CurrentLoadChart({ date, setDate }) {
           </ResponsiveContainer>
         </div>
         
-        <div className="md:w-1/4 flex justify-center items-start">
+        <div className="w-full lg:w-1/4 flex justify-center items-start">
           <Calendar
             mode="single"
             selected={date}
