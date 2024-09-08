@@ -36,7 +36,7 @@ export default function CurrentLoadChart({ date, setDate }) {
       
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="w-full lg:w-3/4">
-          <ResponsiveContainer width="100%" height={300} minWidth={300}>
+          <ResponsiveContainer width="100%" height={400} minWidth={300}>
             <LineChart data={newDelhiDuckCurveData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#555" />
               <XAxis dataKey="time" stroke="#fff" />
