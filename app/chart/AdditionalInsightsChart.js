@@ -12,12 +12,12 @@ import {
 
 const factorsData = [
   { factor: 'Temperature', influence: 90 },
-  { factor: 'Humidity', influence: 65 },
+  { factor: 'Weather', influence: 65 },
   { factor: 'Day of Week', influence: 75 },
   { factor: 'Holidays', influence: 85 },
   { factor: 'Economic Activity', influence: 70 },
   { factor: 'Population Growth', influence: 60 },
-  { factor: 'Technological Changes', influence: 80 },
+  { factor: 'Area Development', influence: 80 },
 ];
 
 export default function AdditionalInsightsChart() {
