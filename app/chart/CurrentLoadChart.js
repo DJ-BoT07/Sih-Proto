@@ -11,18 +11,20 @@ import {
   ResponsiveContainer
 } from "recharts";
 
+// Data for New Delhi Duck Curve
 const newDelhiDuckCurveData = [
-  { time: '12 AM', load: 21000, solar: 0, wind: 2200 },
-  { time: '3 AM', load: 19000, solar: 0, wind: 2700 },
-  { time: '6 AM', load: 17000, solar: 1200, wind: 2200 },
-  { time: '9 AM', load: 15000, solar: 5200, wind: 1700 },
-  { time: '12 PM', load: 13000, solar: 8200, wind: 1200 },
-  { time: '3 PM', load: 11000, solar: 7200, wind: 1700 },
-  { time: '6 PM', load: 16000, solar: 2200, wind: 2200 },
-  { time: '9 PM', load: 19000, solar: 100, wind: 2700 },
-  { time: '11 PM', load: 21000, solar: 0, wind: 2200 },
+  { time: '12 AM', load: 21000, solar: 0 },
+  { time: '3 AM', load: 19000, solar: 0 },
+  { time: '6 AM', load: 17000, solar: 1200 },
+  { time: '9 AM', load: 15000, solar: 5200 },
+  { time: '12 PM', load: 13000, solar: 8200 },
+  { time: '3 PM', load: 11000, solar: 7200 },
+  { time: '6 PM', load: 16000, solar: 2200 },
+  { time: '9 PM', load: 19000, solar: 100 },
+  { time: '11 PM', load: 21000, solar: 0 },
 ];
 
+// Calculate average load
 const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
 
 export default function CurrentLoadChart({ date, setDate }) {
@@ -43,7 +45,6 @@ export default function CurrentLoadChart({ date, setDate }) {
               <Legend />
               <Line type="monotone" dataKey="load" stroke="#8884d8" strokeWidth={3} />
               <Line type="monotone" dataKey="solar" stroke="#ffc658" strokeWidth={2} />
-              <Line type="monotone" dataKey="wind" stroke="#82ca9d" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </div>
