@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Calendar } from "@/components/ui/calendar"
 import {
   LineChart,
@@ -11,23 +11,32 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-// Data for New Delhi Duck Curve
-const newDelhiDuckCurveData = [
-  { time: '12 AM', load: 21000, solar: 0 },
-  { time: '3 AM', load: 19000, solar: 0 },
-  { time: '6 AM', load: 17000, solar: 1200 },
-  { time: '9 AM', load: 15000, solar: 5200 },
-  { time: '12 PM', load: 13000, solar: 8200 },
-  { time: '3 PM', load: 11000, solar: 7200 },
-  { time: '6 PM', load: 16000, solar: 2200 },
-  { time: '9 PM', load: 19000, solar: 100 },
-  { time: '11 PM', load: 21000, solar: 0 },
-];
+const generateRandomData = (date) => {
+  const seed = date.getTime();
+  const random = (min, max, seed) => {
+    const x = Math.sin(seed) * 10000;
+    return ((x - Math.floor(x)) * (max - min) + min);
+  };
 
-// Calculate average load
-const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
+  return Array.from({ length: 24 }, (_, i) => {
+    const hour = i;
+    const baseLoad = 15000 + 5000 * Math.sin((hour - 6) * Math.PI / 12);
+    const randomFactor = random(0.9, 1.1, seed + i);
+    const solarFactor = hour >= 6 && hour <= 18 ? Math.sin((hour - 6) * Math.PI / 12) : 0;
+    
+    return {
+      time: `${hour}:00`,
+      load: Math.round(baseLoad * randomFactor),
+      solar: Math.round(8000 * solarFactor * random(0.8, 1.2, seed + i + 24)),
+    };
+  });
+};
 
 export default function CurrentLoadChart({ date, setDate }) {
+  const newDelhiDuckCurveData = useMemo(() => generateRandomData(date), [date]);
+  
+  const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
+
   return (
     <div className="w-full h-full">
       <h2 className="text-center text-xl sm:text-2xl font-bold mb-2 sm:mb-4 text-white">New Delhi Electricity Load - Duck Curve Effect</h2>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ComposedChart,
   Line,
@@ -11,17 +11,31 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const shortTermForecastData = [
-  { day: 'Mon', forecast: 19000, actual: 18500, temperature: 25 },
-  { day: 'Tue', forecast: 20000, actual: 20200, temperature: 27 },
-  { day: 'Wed', forecast: 18000, actual: 17800, temperature: 23 },
-  { day: 'Thu', forecast: 21000, actual: 21500, temperature: 28 },
-  { day: 'Fri', forecast: 22000, actual: 22100, temperature: 30 },
-  { day: 'Sat', forecast: 17000, actual: 16800, temperature: 22 },
-  { day: 'Sun', forecast: 16000, actual: 16200, temperature: 21 },
-];
+const generateRandomData = (date) => {
+  const seed = date.getTime();
+  const random = (min, max, seed) => {
+    const x = Math.sin(seed) * 10000;
+    return ((x - Math.floor(x)) * (max - min) + min);
+  };
 
-export default function ShortTermForecastChart() {
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  return days.map((day, i) => {
+    const baseForecast = 19000 + 2000 * Math.sin(i * Math.PI / 3.5);
+    const randomFactor = random(0.95, 1.05, seed + i);
+    const temperature = 20 + 10 * Math.sin(i * Math.PI / 3.5);
+    
+    return {
+      day,
+      forecast: Math.round(baseForecast * randomFactor),
+      actual: Math.round(baseForecast * random(0.98, 1.02, seed + i + 7)),
+      temperature: Math.round(temperature * random(0.9, 1.1, seed + i + 14)),
+    };
+  });
+};
+
+export default function ShortTermForecastChart({ date }) {
+  const shortTermForecastData = useMemo(() => generateRandomData(date), [date]);
+
   return (
     <div className="w-full h-full">
       <h2 className="text-center text-2xl font-bold mb-4 text-white">Short-term Load Forecast</h2>

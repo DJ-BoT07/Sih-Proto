@@ -16,10 +16,8 @@ function ChartContent() {
   const subArea = searchParams.get('subArea');
   const dateString = searchParams.get('date');
 
-  // State to manage the selected date
   const [selectedDate, setSelectedDate] = useState(dateString ? parse(dateString, 'yyyy-MM-dd', new Date()) : new Date());
 
-  // Format the selected date for display
   const formattedDate = selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Not selected';
 
   return (
@@ -46,13 +44,13 @@ function ChartContent() {
           <CurrentLoadChart date={selectedDate} setDate={setSelectedDate} />
         </div>
         <div className="border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <ShortTermForecastChart />
+          <ShortTermForecastChart date={selectedDate} />
         </div>
         <div className="border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <LongTermForecastChart />
+          <LongTermForecastChart date={selectedDate} />
         </div>
         <div className="col-span-1 lg:col-span-2 border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <AdditionalInsightsChart />
+          <AdditionalInsightsChart date={selectedDate} />
         </div>
       </div>
     </div>

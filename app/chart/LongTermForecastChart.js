@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -10,22 +10,30 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const longTermForecastData = [
-  { month: 'Jan', forecast: 18000, areaDevelopment: 2.1 },
-  { month: 'Feb', forecast: 17000, areaDevelopment: 2.2 },
-  { month: 'Mar', forecast: 16000, areaDevelopment: 2.3 },
-  { month: 'Apr', forecast: 15000, areaDevelopment: 2.4 },
-  { month: 'May', forecast: 16000, areaDevelopment: 2.5 },
-  { month: 'Jun', forecast: 18000, areaDevelopment: 2.6 },
-  { month: 'Jul', forecast: 20000, areaDevelopment: 2.7 },
-  { month: 'Aug', forecast: 21000, areaDevelopment: 2.8 },
-  { month: 'Sep', forecast: 19000, areaDevelopment: 2.9 },
-  { month: 'Oct', forecast: 17000, areaDevelopment: 3.0 },
-  { month: 'Nov', forecast: 18000, areaDevelopment: 3.1 },
-  { month: 'Dec', forecast: 19000, areaDevelopment: 3.2 },
-];
+const generateRandomData = (date) => {
+  const seed = date.getTime();
+  const random = (min, max, seed) => {
+    const x = Math.sin(seed) * 10000;
+    return ((x - Math.floor(x)) * (max - min) + min);
+  };
 
-export default function LongTermForecastChart() {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return months.map((month, i) => {
+    const baseForecast = 18000 + 3000 * Math.sin(i * Math.PI / 6);
+    const randomFactor = random(0.95, 1.05, seed + i);
+    const baseAreaDevelopment = 2 + i * 0.1;
+    
+    return {
+      month,
+      forecast: Math.round(baseForecast * randomFactor),
+      areaDevelopment: Number((baseAreaDevelopment * random(0.95, 1.05, seed + i + 12)).toFixed(2)),
+    };
+  });
+};
+
+export default function LongTermForecastChart({ date }) {
+  const longTermForecastData = useMemo(() => generateRandomData(date), [date]);
+
   return (
     <div className="w-full h-full">
       <h2 className="text-center text-2xl font-bold mb-4 text-white">Long-term Load Forecast</h2>
