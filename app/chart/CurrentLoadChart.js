@@ -11,6 +11,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import { areaCoordinates } from "@/app/component/globeConfig";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 const generateRandomData = (date, area, subArea) => {
   const seed = date.getTime() + area.length + subArea.length;
@@ -91,16 +92,28 @@ export default function CurrentLoadChart({ date, setDate }) {
             onSelect={(newDate) => setDate(newDate || new Date())}
             className="rounded-md border bg-white mb-4"
           />
-          <select value={area} onChange={(e) => setArea(e.target.value)} className="mb-2 p-2 rounded-md border bg-white">
-            {Object.keys(subAreas).map((area) => (
-              <option key={area} value={area}>{area}</option>
-            ))}
-          </select>
-          <select value={subArea} onChange={(e) => setSubArea(e.target.value)} className="p-2 rounded-md border bg-white">
-            {subAreas[area].map((subArea) => (
-              <option key={subArea} value={subArea}>{subArea}</option>
-            ))}
-          </select>
+          <div className="flex flex-col gap-2 border-2 border-white p-2 rounded-md w-auto">
+          <Select onValueChange={setArea} className="mb-2 p-2 rounded-md border bg-white">
+            <SelectTrigger>
+              <SelectValue placeholder="Select an area" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.keys(subAreas).map((area) => (
+                <SelectItem key={area} value={area}>{area}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select onValueChange={setSubArea} className="p-2 rounded-md border bg-white">
+            <SelectTrigger>
+              <SelectValue placeholder="Select a sub-area" />
+            </SelectTrigger>
+            <SelectContent>
+              {subAreas[area].map((subArea) => (
+                <SelectItem key={subArea} value={subArea}>{subArea}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          </div>
         </div>
       </div>
     </div>
