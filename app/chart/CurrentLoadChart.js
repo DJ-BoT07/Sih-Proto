@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Calendar } from "@/components/ui/calendar"
 import {
   LineChart,
@@ -10,9 +10,10 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
+import { areaCoordinates } from "@/app/component/globeConfig";
 
-const generateRandomData = (date) => {
-  const seed = date.getTime();
+const generateRandomData = (date, area, subArea) => {
+  const seed = date.getTime() + area.length + subArea.length;
   const random = (min, max, seed) => {
     const x = Math.sin(seed) * 10000;
     return ((x - Math.floor(x)) * (max - min) + min);
@@ -24,18 +25,43 @@ const generateRandomData = (date) => {
     const randomFactor = random(0.9, 1.1, seed + i);
     const solarFactor = hour >= 6 && hour <= 18 ? Math.sin((hour - 6) * Math.PI / 12) : 0;
     
+    // Adjusting the load to reflect the duck curve
+    const adjustedLoad = baseLoad - (solarFactor * 8000 * random(0.8, 1.2, seed + i + 24));
+
     return {
       time: `${hour}:00`,
-      load: Math.round(baseLoad * randomFactor),
+      load: Math.round(adjustedLoad * randomFactor),
       solar: Math.round(8000 * solarFactor * random(0.8, 1.2, seed + i + 24)),
     };
   });
 };
 
 export default function CurrentLoadChart({ date, setDate }) {
-  const newDelhiDuckCurveData = useMemo(() => generateRandomData(date), [date]);
+  const [area, setArea] = useState("BSES Rajdhani Power Limited");
+  const [subArea, setSubArea] = useState("Vasant Kunj");
+
+  const newDelhiDuckCurveData = useMemo(() => generateRandomData(date, area, subArea), [date, area, subArea]);
   
   const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
+
+  const subAreas = {
+    "BSES Rajdhani Power Limited": [
+      "Vasant Kunj", "Saket", "Vasant Vihar", "Dwarka",
+      "Janakpuri", "Punjabi Bagh", "Hauz Khas", "Rajouri Garden"
+    ],
+    "BSES Yamuna Power Limited": [
+      "Mayur Vihar", "Laxmi Nagar", "Gandhi Nagar", "Preet Vihar",
+      "Shahdara", "Chandni Chowk", "Yamuna Vihar", "Krishna Nagar"
+    ],
+    "Tata Power Delhi Distribution Limited": [
+      "Rohini", "Pitampura", "Shalimar Bagh", "Model Town",
+      "Ashok Vihar", "Civil Lines", "Narela", "Jahangirpuri"
+    ],
+    "New Delhi Municipal Council": [
+      "Connaught Place", "Chanakyapuri", "India Gate", "Lutyens' Delhi",
+      "President's Estate", "Parliament House area"
+    ],
+  };
 
   return (
     <div className="w-full h-full">
@@ -58,13 +84,23 @@ export default function CurrentLoadChart({ date, setDate }) {
           </ResponsiveContainer>
         </div>
         
-        <div className="w-full lg:w-1/4 flex justify-center items-start">
+        <div className="w-full lg:w-1/4 flex flex-col justify-center items-start">
           <Calendar
             mode="single"
             selected={date}
             onSelect={(newDate) => setDate(newDate || new Date())}
-            className="rounded-md border bg-white"
+            className="rounded-md border bg-white mb-4"
           />
+          <select value={area} onChange={(e) => setArea(e.target.value)} className="mb-2 p-2 rounded-md border bg-white">
+            {Object.keys(subAreas).map((area) => (
+              <option key={area} value={area}>{area}</option>
+            ))}
+          </select>
+          <select value={subArea} onChange={(e) => setSubArea(e.target.value)} className="p-2 rounded-md border bg-white">
+            {subAreas[area].map((subArea) => (
+              <option key={subArea} value={subArea}>{subArea}</option>
+            ))}
+          </select>
         </div>
       </div>
     </div>
