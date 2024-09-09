@@ -76,6 +76,7 @@ export function Globe({
         ["lat", "lng"].every((k) => v2[k] === v[k])) === i);
 
     setGlobeData(filteredPoints);
+    console.log("Globe Data:", filteredPoints); // Debugging line
   }, [data, defaultProps.pointSize]);
 
   useEffect(() => {
@@ -119,6 +120,8 @@ export function Globe({
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod((defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings);
+
+    console.log("Rings Data Set:", globeData); // Debugging line
   }, [globeData, data, defaultProps]);
 
   useEffect(() => {
@@ -140,15 +143,21 @@ export function Globe({
 
     const interval = setInterval(() => {
       if (!globeRef.current || !globeData) return;
-      numbersOfRings = genRandomNumbers(0, data.length, Math.floor((data.length * 4) / 5));
+      numbersOfRings = genRandomNumbers(0, globeData.length, Math.floor((globeData.length * 4) / 5));
+      console.log("Generated Numbers of Rings:", numbersOfRings); // Debugging line
 
-      globeRef.current.ringsData(globeData.filter((d, i) => numbersOfRings.includes(i)));
+      const filteredRingsData = globeData.filter((d, i) => numbersOfRings.includes(i));
+      console.log("Filtered Rings Data:", filteredRingsData); // Debugging line
+
+      if (filteredRingsData.length > 0) {
+        globeRef.current.ringsData(filteredRingsData);
+      }
     }, 2000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [globeData, data]);
+  }, [globeData]);
 
   return (<>
     <threeGlobe ref={globeRef} />

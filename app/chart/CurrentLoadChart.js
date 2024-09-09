@@ -92,27 +92,27 @@ export default function CurrentLoadChart({ date, setDate }) {
             onSelect={(newDate) => setDate(newDate || new Date())}
             className="rounded-md border bg-white mb-4"
           />
-          <div className="flex flex-col gap-2 border-2 border-white p-2 rounded-md w-auto">
-          <Select onValueChange={setArea} className="mb-2 p-2 rounded-md border bg-white">
-            <SelectTrigger>
-              <SelectValue placeholder="Select an area" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(subAreas).map((area) => (
-                <SelectItem key={area} value={area}>{area}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={setSubArea} className="p-2 rounded-md border bg-white">
-            <SelectTrigger>
-              <SelectValue placeholder="Select a sub-area" />
-            </SelectTrigger>
-            <SelectContent>
-              {subAreas[area].map((subArea) => (
-                <SelectItem key={subArea} value={subArea}>{subArea}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2 border-2 border-white p-2 rounded-md w-full">
+            <Select onValueChange={setArea} className="mb-2">
+              <SelectTrigger>
+                <SelectValue placeholder="Select an area" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(subAreas).map((area) => (
+                  <SelectItem key={area} value={area}>{area}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select onValueChange={setSubArea}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a sub-area" />
+              </SelectTrigger>
+              <SelectContent>
+                {subAreas[area].map((subArea) => (
+                  <SelectItem key={subArea} value={subArea}>{subArea}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
