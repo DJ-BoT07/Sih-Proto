@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { Calendar } from "@/components/ui/calendar"
+import React, { useState, useEffect } from "react";
 import {
   LineChart,
   Line,
@@ -8,64 +7,167 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Brush,
+  ComposedChart,
+  Bar
 } from "recharts";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import ChartLoader from "../components/ChartLoader";
 
-const generateRandomData = (date) => {
-  const seed = date.getTime();
-  const random = (min, max, seed) => {
-    const x = Math.sin(seed) * 10000;
-    return ((x - Math.floor(x)) * (max - min) + min);
-  };
-
-  return Array.from({ length: 24 }, (_, i) => {
-    const hour = i;
-    const baseLoad = 15000 + 5000 * Math.sin((hour - 6) * Math.PI / 12);
-    const randomFactor = random(0.9, 1.1, seed + i);
-    const solarFactor = hour >= 6 && hour <= 18 ? Math.sin((hour - 6) * Math.PI / 12) : 0;
-    
-    return {
-      time: `${hour}:00`,
-      load: Math.round(baseLoad * randomFactor),
-      solar: Math.round(8000 * solarFactor * random(0.8, 1.2, seed + i + 24)),
-    };
+const fetchCurrentLoadData = async (date, area, setLoadingProgress) => {
+  setLoadingProgress(10);
+  const response = await fetch('http://localhost:5000/api/forecast', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      type: 'current',
+      date: format(date, 'yyyy-MM-dd'),
+      area: area,
+    }),
   });
+  
+  setLoadingProgress(50);
+  if (!response.ok) {
+    throw new Error('Failed to fetch forecast data');
+  }
+  
+  const data = await response.json();
+  setLoadingProgress(100);
+
+  // Add scatter and personalization
+  return data.map(item => ({
+    ...item,
+    load: item.load + (Math.random() - 0.5) * 1000,
+    solarGeneration: item.solarGeneration + (Math.random() - 0.5) * 200,
+    netLoad: Math.max(0, item.netLoad + (Math.random() - 0.5) * 800),
+  }));
 };
 
-export default function CurrentLoadChart({ date, setDate }) {
-  const newDelhiDuckCurveData = useMemo(() => generateRandomData(date), [date]);
-  
-  const averageLoad = Math.round(newDelhiDuckCurveData.reduce((sum, data) => sum + data.load, 0) / newDelhiDuckCurveData.length);
+const renderTooltipContent = (o) => {
+  const { payload, label } = o;
+  if (!payload || payload.length === 0) return null;
 
   return (
-    <div className="w-full h-full">
-      <h2 className="text-center text-xl sm:text-2xl font-bold mb-2 sm:mb-4 text-white">New Delhi Electricity Load - Duck Curve Effect</h2>
-      <p className="text-center text-lg sm:text-xl font-semibold mb-2 sm:mb-4 text-white">Average Load: {averageLoad} MW</p>
-      <p className="text-center text-base sm:text-lg mb-2 sm:mb-4 text-white">Selected Date: {date.toDateString()}</p>
-      
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="w-full lg:w-3/4">
-          <ResponsiveContainer width="100%" height={400} minWidth={300}>
-            <LineChart data={newDelhiDuckCurveData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-              <XAxis dataKey="time" stroke="#fff" />
-              <YAxis stroke="#fff" />
-              <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
-              <Legend />
-              <Line type="monotone" dataKey="load" stroke="#8884d8" strokeWidth={3} />
-              <Line type="monotone" dataKey="solar" stroke="#ffc658" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+    <div className="customized-tooltip-content bg-gray-800 p-2 rounded">
+      <p className="total text-white">{`${label}`}</p>
+      <ul className="list">
+        {payload.map((entry, index) => (
+          <li key={`item-${index}`} style={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value.toFixed(2)} kW`}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default function CurrentLoadChart({ date, setDate, area }) {
+  const [currentLoadData, setCurrentLoadData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [averageLoad, setAverageLoad] = useState(0);
+
+  useEffect(() => {
+    setLoadingProgress(0);
+    fetchCurrentLoadData(date, area, setLoadingProgress)
+      .then(data => {
+        setCurrentLoadData(data);
+        const avgLoad = data.reduce((sum, item) => sum + item.load, 0) / data.length;
+        setAverageLoad(Math.round(avgLoad));
+        setLoadingProgress(100);
+      })
+      .catch(err => {
+        console.error("Error fetching current load data:", err);
+        setError(err.message);
+        setLoadingProgress(100);
+      });
+  }, [date, area]);
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  if (currentLoadData.length === 0 || loadingProgress < 100) {
+    return <ChartLoader percentage={loadingProgress} />;
+  }
+
+  return (
+    <div className="w-full h-full flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-white">Current Load Distribution</h2>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={"w-[240px] justify-start text-left font-normal"}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="end">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+      <div className="text-white text-xl mb-4">
+        Average Load: {averageLoad} kW
+      </div>
+      <div className="flex-grow" style={{ minHeight: "1000px" }}>
+        <ResponsiveContainer width="100%" height="50%">
+          <LineChart
+            data={currentLoadData}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis />
+            <Tooltip content={renderTooltipContent} />
+            <Legend />
+            <Line type="monotone" dataKey="load" name="Total Load" stroke="#8884d8" strokeWidth={2} />
+            <Line type="monotone" dataKey="solarGeneration" name="Solar Generation" stroke="#82ca9d" strokeWidth={2} />
+            <Line type="monotone" dataKey="netLoad" name="Net Load" stroke="#ffc658" strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
         
-        <div className="w-full lg:w-1/4 flex justify-center items-start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(newDate) => setDate(newDate || new Date())}
-            className="rounded-md border bg-white"
-          />
-        </div>
+        <ResponsiveContainer width="100%" height="40%">
+          <ComposedChart
+            data={currentLoadData}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis />
+            <Tooltip content={renderTooltipContent} />
+            <Legend />
+            <Bar dataKey="solarGeneration" name="Solar Generation" fill="#82ca9d" />
+            <Bar dataKey="netLoad" name="Grid Load" fill="#8884d8" />
+            <Line type="monotone" dataKey="load" name="Total Load" stroke="#ff7300" strokeWidth={2} />
+            <Brush />
+          </ComposedChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

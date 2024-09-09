@@ -41,16 +41,16 @@ function ChartContent() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="col-span-1 lg:col-span-2 border-4 border-blue-500 rounded-lg p-4 sm:p-6 md:p-10 shadow-lg">
-          <CurrentLoadChart date={selectedDate} setDate={setSelectedDate} />
+          <CurrentLoadChart date={selectedDate} setDate={setSelectedDate} area={area} />
         </div>
         <div className="border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <ShortTermForecastChart date={selectedDate} />
+          <ShortTermForecastChart date={selectedDate} area={area} />
         </div>
         <div className="border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <LongTermForecastChart date={selectedDate} />
+          <LongTermForecastChart date={selectedDate} area={area} />
         </div>
         <div className="col-span-1 lg:col-span-2 border-4 border-blue-500 rounded-lg p-4 sm:p-6 shadow-lg">
-          <AdditionalInsightsChart date={selectedDate} />
+          <AdditionalInsightsChart date={selectedDate} area={area} />
         </div>
       </div>
     </div>
